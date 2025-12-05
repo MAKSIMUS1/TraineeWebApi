@@ -1,3 +1,4 @@
+using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -7,18 +8,23 @@ using Serilog;
 using System.Reflection;
 using System.Text;
 using WebApiTrainingProject.Data;
+using WebApiTrainingProject.Middlewares;
 using WebApiTrainingProject.Repositories.Implementations;
 using WebApiTrainingProject.Repositories.Interfaces;
 using WebApiTrainingProject.Services.Implementations;
 using WebApiTrainingProject.Services.Interfaces;
+using WebApiTrainingProject.Utils;
+using WebApiTrainingProject.Utils.Mapping;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Log
-//builder.Host.UseSerilog((context, config) =>
-//{
-//    config.ReadFrom.Configuration(context.Configuration);
-//});
+Log.Logger = new LoggerConfiguration()
+    .ReadFrom.Configuration(builder.Configuration)
+    .Enrich.FromLogContext()
+    .CreateLogger();
+
+builder.Host.UseSerilog();
 
 // DB
 string connectionString = builder.Configuration.GetConnectionString("DockerDBConnection");
@@ -27,12 +33,14 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 // Repositories
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
 
 // Services
 builder.Services.AddSingleton<IJwtTokenService, JwtTokenService>();
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IProjectService, ProjectService>();
 
 // JWT
 builder.Services
@@ -59,19 +67,31 @@ builder.Services.AddAuthorization();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// Exeptions
+builder.Services.AddTransient<ExceptionHandlingMiddleware>();
+
 // AutoMapper
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
 // Controllers
 builder.Services.AddControllers();
 
+// FluentValidation
+builder.Services.AddFluentValidationStartup();
+
+
 var app = builder.Build();
+Log.Information("Application starting...");
+
+
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
     db.Database.Migrate();
 }
+
 
 // Swagger
 if(app.Environment.IsDevelopment())
@@ -82,6 +102,7 @@ if(app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 // app.UseSerilogRequestLogging();
+
 
 app.UseAuthentication();
 app.UseAuthorization();
