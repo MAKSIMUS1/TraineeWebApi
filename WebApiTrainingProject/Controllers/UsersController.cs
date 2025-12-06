@@ -8,8 +8,8 @@ using WebApiTrainingProject.Services.Interfaces;
 
 namespace WebApiTrainingProject.Controllers
 {
-    [ApiController]
     [Route("api/users")]
+    [ApiController]
     [Authorize]
     public class UserController : ControllerBase
     {

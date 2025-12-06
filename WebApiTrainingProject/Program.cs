@@ -34,6 +34,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 // Repositories
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
+builder.Services.AddScoped<INodeGraphRepository, NodeGraphRepository>();
 
 // Services
 builder.Services.AddSingleton<IJwtTokenService, JwtTokenService>();
@@ -41,6 +42,7 @@ builder.Services.AddSingleton<IJwtTokenService, JwtTokenService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IProjectService, ProjectService>();
+builder.Services.AddScoped<INodeGraphService, NodeGraphService>();
 
 // JWT
 builder.Services
@@ -101,7 +103,7 @@ if(app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-// app.UseSerilogRequestLogging();
+app.UseSerilogRequestLogging();
 
 
 app.UseAuthentication();

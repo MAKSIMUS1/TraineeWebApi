@@ -7,8 +7,8 @@ using WebApiTrainingProject.Services.Interfaces;
 
 namespace WebApiTrainingProject.Controllers
 {
-    [ApiController]
     [Route("api/projects")]
+    [ApiController]
     [Authorize]
     public class ProjectsController : ControllerBase
     {
@@ -62,5 +62,4 @@ namespace WebApiTrainingProject.Controllers
             return NoContent();
         }
     }
-
 }
