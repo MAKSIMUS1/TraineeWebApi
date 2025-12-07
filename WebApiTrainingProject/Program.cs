@@ -9,6 +9,7 @@ using System.Reflection;
 using System.Text;
 using WebApiTrainingProject.Data;
 using WebApiTrainingProject.Middlewares;
+using WebApiTrainingProject.NodeSystem.Nodes;
 using WebApiTrainingProject.Repositories.Implementations;
 using WebApiTrainingProject.Repositories.Interfaces;
 using WebApiTrainingProject.Services.Implementations;
@@ -85,7 +86,6 @@ builder.Services.AddFluentValidationStartup();
 var app = builder.Build();
 Log.Information("Application starting...");
 
-
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 using (var scope = app.Services.CreateScope())
@@ -112,3 +112,5 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+
