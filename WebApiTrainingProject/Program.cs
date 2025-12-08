@@ -1,4 +1,4 @@
-using FluentValidation;
+﻿using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +9,7 @@ using System.Reflection;
 using System.Text;
 using WebApiTrainingProject.Data;
 using WebApiTrainingProject.Middlewares;
+using WebApiTrainingProject.NodeSystem;
 using WebApiTrainingProject.NodeSystem.Nodes;
 using WebApiTrainingProject.Repositories.Implementations;
 using WebApiTrainingProject.Repositories.Interfaces;
@@ -44,6 +45,10 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IProjectService, ProjectService>();
 builder.Services.AddScoped<INodeGraphService, NodeGraphService>();
+
+builder.Services.AddScoped<INodeExecutorService, NodeExecutorService>();
+builder.Services.AddSingleton<NodeFactory>();
+
 
 // JWT
 builder.Services
@@ -82,7 +87,6 @@ builder.Services.AddControllers();
 // FluentValidation
 builder.Services.AddFluentValidationStartup();
 
-
 var app = builder.Build();
 Log.Information("Application starting...");
 
@@ -94,7 +98,6 @@ using (var scope = app.Services.CreateScope())
     db.Database.Migrate();
 }
 
-
 // Swagger
 if(app.Environment.IsDevelopment())
 {
@@ -104,7 +107,6 @@ if(app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseSerilogRequestLogging();
-
 
 app.UseAuthentication();
 app.UseAuthorization();
