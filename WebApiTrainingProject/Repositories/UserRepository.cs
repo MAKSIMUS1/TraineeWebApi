@@ -3,7 +3,7 @@ using WebApiTrainingProject.Data.Models;
 using WebApiTrainingProject.Data;
 using WebApiTrainingProject.Repositories.Interfaces;
 
-namespace WebApiTrainingProject.Repositories.Implementations
+namespace WebApiTrainingProject.Repositories
 {
     public class UserRepository : BaseRepository<User, ApplicationDbContext>, IUserRepository
     {

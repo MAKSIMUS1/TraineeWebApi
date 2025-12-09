@@ -2,8 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using WebApiTrainingProject.Repositories.Interfaces;
-using WebApiTrainingProject.Services.Implementations;
 using WebApiTrainingProject.Services.Interfaces;
+using WebApiTrainingProject.Utils;
 
 namespace WebApiTrainingProject.Controllers
 {
@@ -22,13 +22,11 @@ namespace WebApiTrainingProject.Controllers
             _graphRepository = graphRepository;
             _executor = executor;
         }
-        private Guid GetUserId() =>
-            Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
 
         [HttpPost("{id}/execute")]
         public async Task<IActionResult> ExecuteGraph(Guid id)
         {
-            var userId = GetUserId();
+            var userId = User.GetUserId();
 
             var graph = await _graphRepository.GetByIdAsyncIncludeProject(id);
             if (graph == null)

@@ -3,7 +3,7 @@ using WebApiTrainingProject.Data;
 using WebApiTrainingProject.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace WebApiTrainingProject.Repositories.Implementations
+namespace WebApiTrainingProject.Repositories
 {
     public class NodeGraphRepository : BaseRepository<NodeGraph, ApplicationDbContext>, INodeGraphRepository
     {

@@ -4,6 +4,7 @@ using System.Security.Claims;
 using WebApiTrainingProject.DTOs.Request;
 using WebApiTrainingProject.DTOs.Response;
 using WebApiTrainingProject.Services.Interfaces;
+using WebApiTrainingProject.Utils;
 
 namespace WebApiTrainingProject.Controllers
 {
@@ -19,13 +20,10 @@ namespace WebApiTrainingProject.Controllers
             _projectService = projectService;
         }
 
-        private Guid GetUserId() =>
-            Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
-
         [HttpGet]
         public async Task<ActionResult<List<ProjectDto>>> GetAll()
         {
-            var userId = GetUserId();
+            var userId = User.GetUserId();
             var projects = await _projectService.GetUserProjectsAsync(userId);
             return Ok(projects);
         }
@@ -33,7 +31,11 @@ namespace WebApiTrainingProject.Controllers
         [HttpPost]
         public async Task<ActionResult<ProjectDto>> Create(CreateProjectDto dto)
         {
-            var userId = GetUserId();
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var userId = User.GetUserId();
             var project = await _projectService.CreateAsync(userId, dto);
             return Ok(project);
         }
@@ -41,11 +43,12 @@ namespace WebApiTrainingProject.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult<ProjectDto>> Update(Guid id, UpdateProjectDto dto)
         {
-            var userId = GetUserId();
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var userId = User.GetUserId();
             var updated = await _projectService.UpdateAsync(userId, id, dto);
-
-            if (updated == null)
-                return NotFound("Проект не найден или не принадлежит пользователю");
 
             return Ok(updated);
         }
@@ -53,11 +56,8 @@ namespace WebApiTrainingProject.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(Guid id)
         {
-            var userId = GetUserId();
-            var ok = await _projectService.DeleteAsync(userId, id);
-
-            if (!ok)
-                return NotFound("Проект не найден или не принадлежит пользователю");
+            var userId = User.GetUserId();
+            var result = await _projectService.DeleteAsync(userId, id);
 
             return NoContent();
         }

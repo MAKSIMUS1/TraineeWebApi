@@ -9,7 +9,6 @@ namespace WebApiTrainingProject.Utils
     {
         public static IServiceCollection AddFluentValidationStartup(this IServiceCollection services)
         {
-            //Fluent validation settings
             services.AddFluentValidationAutoValidation();
             services.AddValidatorsFromAssembly(typeof(FluentValidationStartup).Assembly);
 

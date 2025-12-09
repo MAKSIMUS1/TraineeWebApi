@@ -15,12 +15,6 @@ namespace WebApiTrainingProject.DTOs.DTOValidators
                 .Must(BeValidJson)
                 .WithMessage("JsonData must contain valid JSON");
         }
-
-        private object RuleFor(Func<object, object> value)
-        {
-            throw new NotImplementedException();
-        }
-
         private bool BeValidJson(string json)
         {
             if (string.IsNullOrWhiteSpace(json))

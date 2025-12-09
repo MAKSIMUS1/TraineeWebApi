@@ -8,8 +8,7 @@ namespace WebApiTrainingProject.DTOs.DTOValidators
         public UpdateProjectDtoValidator()
         {
             RuleFor(x => x.Name)
-                .NotEmpty()
-                .WithMessage("Название проекта не может быть пустым.");
+                .NotEmpty().WithMessage("The project name cannot be empty.");
         }
     }
 }

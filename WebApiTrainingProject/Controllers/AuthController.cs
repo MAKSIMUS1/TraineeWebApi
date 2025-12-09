@@ -20,37 +20,24 @@ namespace WebApiTrainingProject.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register(RegisterDto request)
         {
-            try
+            if (!ModelState.IsValid)
             {
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest(ModelState);
-                }
-                var response = await _authService.RegisterAsync(request);
-                return Ok(response);
+                return BadRequest(ModelState);
             }
-            catch (Exception ex)
-            {
-                return BadRequest(new { message = ex.Message });
-            }
+            var response = await _authService.RegisterAsync(request);
+            return Ok(response);
+
         }
 
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginDto request)
         {
-            try
+            if (!ModelState.IsValid)
             {
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest(ModelState);
-                }
-                var response = await _authService.LoginAsync(request);
-                return Ok(response);
+                return BadRequest(ModelState);
             }
-            catch (Exception ex)
-            {
-                return BadRequest(new { message = ex.Message });
-            }
+            var response = await _authService.LoginAsync(request);
+            return Ok(response);
         }
     }
 }

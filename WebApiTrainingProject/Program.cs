@@ -11,9 +11,9 @@ using WebApiTrainingProject.Data;
 using WebApiTrainingProject.Middlewares;
 using WebApiTrainingProject.NodeSystem;
 using WebApiTrainingProject.NodeSystem.Nodes;
-using WebApiTrainingProject.Repositories.Implementations;
+using WebApiTrainingProject.Repositories;
 using WebApiTrainingProject.Repositories.Interfaces;
-using WebApiTrainingProject.Services.Implementations;
+using WebApiTrainingProject.Services;
 using WebApiTrainingProject.Services.Interfaces;
 using WebApiTrainingProject.Utils;
 using WebApiTrainingProject.Utils.Mapping;
@@ -34,6 +34,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(connectionString));
 
 // Repositories
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
 builder.Services.AddScoped<INodeGraphRepository, NodeGraphRepository>();

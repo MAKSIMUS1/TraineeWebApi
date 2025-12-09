@@ -5,7 +5,7 @@ using System.Text;
 using WebApiTrainingProject.Data.Models;
 using WebApiTrainingProject.Services.Interfaces;
 
-namespace WebApiTrainingProject.Services.Implementations
+namespace WebApiTrainingProject.Services
 {
     public class JwtTokenService : IJwtTokenService
     {
